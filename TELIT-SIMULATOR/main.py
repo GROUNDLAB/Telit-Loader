@@ -1,0 +1,45 @@
+import sout
+import gpsParser
+import locs
+import MOD
+import GPIO
+
+#MAIN
+print 'PedoTracker main'
+#turn off LED
+GPIO.setIOvalue(12, 0)
+
+i = 10
+while (i > 0):
+	pos = gpsParser.currentPosition()
+	myLat = pos["lat"]
+	myLon = pos["lon"]
+	print "current position: %s,%s" % (myLat, myLon)
+	
+	if (myLat[3] != 'X' and myLon != 'X'):
+		warning = 0
+		for l in locs.locs:
+			name = l[0]
+			theLat = l[1]
+			theLon = l[2]
+			#one second of longitude @ 71W: 22.8m
+			#one second of latitude @ 42N: 30.8m
+			if((myLat[0] == theLat[0]) and (myLon[0] == theLon[0])):
+				if((myLat[1] == theLat[1]) and (myLon[1] == theLon[1])):
+					if((abs(myLat[2] - theLat[2]) < 2) and (abs(myLon[2] - theLon[2]) < 2)):
+						print "too close to " + name
+						warning = warning+1
+		if (warning != 0):
+			print "Proximity Alert!"
+			#blink LED
+#			for(j in range(10)):
+#				GPIO.setIOvalue(12, 1)
+#				MOD.sleep(1)
+#				GPIO.setIOvalue(12, 0)
+#				MOD.sleep(1)
+			#pulse motor
+		else:
+			print "OK"
+	i = i - 1
+#	MOD.sleep(50) #sleep five seconds
+print "done"

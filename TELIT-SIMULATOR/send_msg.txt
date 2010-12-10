@@ -1,0 +1,22 @@
+1: Set the band
+AT#BND=? //which band
+AT#BND=2 //set to 2 I think, GMS 850MHz + DCS 1800MHz, or maybe it was 3?
+
+2: Finding the network
+AT+COPS=? //lists the networks that are available to you and the one you are on
+
+3: Send a txt msg!
+AT+CMGS="+16178003283" //use whatever number you want
+press ctrl z to send
+Then it will prompt you for the text.
+
+4: read txt msgs you got:
+AT+CMGL="ALL"
+(other options:
+"REC UNREAD" -  new message 
+  "REC READ" - read message 
+  "STO UNSENT" - stored message not yet sent 
+  "STO SENT" - stored message already sent 
+  "ALL" - all messages. 
+)
+
