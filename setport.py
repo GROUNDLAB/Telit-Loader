@@ -36,7 +36,7 @@ def heartBeat():
 	global telitPort
 	telitPort.flushInput() #clear buffer of junk
 	telitPort.write("AT\r") #send a AT<CR>
-	time.sleep(1)
+	time.sleep(.1)
 	input = telitPort.readlines()
 	
 	if "OK\r\n" not in input:

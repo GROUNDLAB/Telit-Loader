@@ -4,4 +4,4 @@
 #as shown
 
 PORT /dev/ttyUSB0
-BAUD 9600
+BAUD 115200
