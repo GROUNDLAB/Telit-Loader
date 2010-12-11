@@ -3,19 +3,21 @@ import sys
 import time
 
 #gets Serial prt settings from settings.txt################################
-	global PORT=None
-	global BAUD=None	
-	global telitPort=None
+global PORT 
+PORT = None
+global BAUD 
+BAUD = None	
+global telitPort 
+telitPort = None
 def getSerialSettings():
 	global PORT
 	global BAUD
 	with open("settings.txt") as f: #using with you don't have to call close()
 	    for line in f:
-		line=line.lower()
-	        args=line.split(" ")
-		if args[0] == "port":
+	        args=line.replace('\n','').split(" ")
+		if args[0].lower() == "port":
 			PORT = args[1]
-		elif args[0] == "baud":
+		elif args[0].lower() == "baud":
 			BAUD = args[1]
 		else:
 			 pass
@@ -51,7 +53,7 @@ def openSerial():
 	global telitPort
 	try:
 		telitPort = serial.Serial(PORT,BAUD,timeout=1,bytesize=8,\
-		stopbits='N',writeTimeout=1)
+		stopbits=1,parity='N',writeTimeout=1)
 		telitPort.open()
 	except serial.SerialException,e:
 		print "SERIAL FAILURE: ",e
@@ -68,8 +70,12 @@ def serialOpenCheck():
 	return True
 ###############################################################################
 
-#close Socket
+#close Socket##################################################################
 def serialClose():
 	telitPort.close()
+###############################################################################
+
+serialOpenCheck()
+serialClose()
 
 
