@@ -56,11 +56,11 @@ def heartBeat():
 	input = getReply()	
 
 	if "OK\r\n" not in input:
-		print "Failed to talk to Telit is it on? is the RX TX right?"
+		print "Failed to talk to Telit, is it on? Is the port free?"
 		print "Try to figure it out and try again"
 		sys.exit(1)
 	else:
-		print "Telit responded proceding"
+		print "Telit replied proceding..........."
 		return True
 ##############################################################################
 

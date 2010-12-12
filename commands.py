@@ -6,6 +6,9 @@ import time
 global fileInput
 global fileLength
 global fileName
+fileName=None
+fileLength=None
+fileInput=None
 #Gets file name from options##############################################
 def getFile():
 	global fileInput
@@ -35,7 +38,6 @@ def writeFile():
 	global fileInput
 	global fileLength
 	global fileName
-	global telitPort
 	
 	print "writing file:"
 	print fileName
@@ -55,11 +57,11 @@ def writeFile():
 	lineMarker=0
 	for line in fileInput:
 		try:	#two from back is /n/l
-			if(line[-2:] == "\r\n"):
+			if(line[-1:] == "\r\n"):
 				writeLine=line
-			#it is somthing else post append \r\n
+			#it is somthing else append \r\n
 			else:
-				writeLine=line + "\r\n"
+				writeLine=line[:-1] + "\r\n"
 			#write out to port
 			setPort.telitPort.write(writeLine)
 			#print what we wrote
@@ -70,13 +72,119 @@ def writeFile():
 			print "serial timed out on line " + lineMarker	
 			setPort.serialClose()
 			sys.exit(1)
+	input = setPort.getReply()
+	for line in input:
+		if "OK\r\n" in line:
+			print "loaded OK"
+			break
+	else:
+		print input
 	setPort.telitPort.flush()
 	print"END FILE###########"
+########################################################################
+
+
+#DELETE FILES############################################################
+def deleteFile():
+	global fileLength
+	global fileName
+	
+	setPort.serialOpenCheck()				#open serial connection send AT to check
+	deleteCommand= "AT#DSCRIPT=%s\r\n" % (fileName)
+	if ".py" in fileName:
+		print "\nDELETING .py file:"
+		#delete both files .py and .pyo
+		print "Sending: " + deleteCommand
+		setPort.telitPort.flush()
+		setPort.telitPort.write(deleteCommand)
+		input = setPort.getReply()
+		for lines in input:
+			if "OK" in lines:
+				print "FOUND AND DELETED:" +fileName
+				break	
+			elif "ERROR" in lines:
+				print "didn't find .py file: " +fileName
+				print lines
+				break
+		#delete .pyo
+		print "\nDELETING .pyo file:"
+		deleteCommand= "AT#DSCRIPT=%so\r\n" % (fileName) #add 'o' for pyo
+		print "Sending: " + deleteCommand
+		setPort.telitPort.flushInput()
+		setPort.telitPort.write(deleteCommand)
+		input = setPort.getReply()
+		for lines in input:
+			if "OK" in lines:
+				print "FOUND AND DELETED:" +fileName
+				break
+			elif "ERROR" in lines:
+				print "didn't find .pyo file: " +fileName
+				print lines
+				break
+	setPort.serialClose()
+########################################################################################
+
+
+#list Files##############################################################################
+def listFiles():
+	global fileLength
+	global fileName
+	
+	if fileName is None:				#set impossible
+		fileName="spoogert"
+		fileLength=1000000000
+	setPort.serialOpenCheck()			#open serial connection send AT to check
+	listCommand= "AT#LSCRIPT\r\n" 
+	print "Listing current files:"
+	print "Sending: " + listCommand
+	setPort.telitPort.flush()
+	setPort.telitPort.write(listCommand)
+	input = setPort.getReply()
+	foundFile="false"
+	for line in input:
+		print line
+		if "#LSCRIPT: \"%s\",%i" % (fileName,fileLength) in line:
+			print "*******************************FOUND FILE->" +fileName
+			foundFile="true"	
+	if foundFile == "true":
+		print "#########################################"
+		print "FILE: " +fileName + " is stored on Telit.."
+		print "#########################################"
+	
+	setPort.serialClose()
+##########################################################################################
+
+#READ FILE###############################################################################
+def readFile():
+	global fileName
+	setPort.serialOpenCheck()			#open serial connection send AT to check
+	readCommand = "AT#RSCRIPT=\"%s\"\r\n" % (fileName)
+	print "Reading file: " + fileName
+	print "Sending: " + readCommand
+	setPort.telitPort.flush()
+	setPort.telitPort.write(readCommand)
+	input = setPort.getReply()
+	lineMarker=0
+	for line in input:
+		time.sleep(.1)
+		print "%i: %s"%(lineMarker,line)
+		lineMarker+=1
+	
+###########################################################################################
+
+
 
 
 #test			
 getFile()
+#readFile()
+#listFiles()
+#deleteFile()
 writeFile()
 #print fileLength
 #print fileInput
+
+
+
+
 
