@@ -2,6 +2,7 @@ import sys,os
 import optparse
 import setPort
 import time
+import setWorkingDir #sets working directory to TELITLOADER
 
 global fileInput
 global fileLength
@@ -9,6 +10,8 @@ global fileName
 fileName=None
 fileLength=None
 fileInput=None
+
+
 #Gets file name from options##############################################
 def getFile():
 	global fileInput
@@ -24,11 +27,12 @@ def getFile():
 		print "You must specify a file EG. make upload FILE=myFile.py"
 		sys.exit(1) #bad for UNIX
 	else:
-		fileName = options.FILE			#the name of the file
-		print "Opening:"+ fileName		
-		file = open(fileName,'r')
+		fileName = options.FILE						#the name of the file
+		absFileName = os.path.abspath("../UploadCode/"+options.FILE)	#the full path of the file
+		print "Opening:"+ absFileName		
+		file = open(absFileName,'r')
 		fileInput = file.readlines()
-		fileLength = os.path.getsize(fileName)
+		fileLength = os.path.getsize(absFileName)
 		######***TO COMPENSATE FOR FILE SIZE BUG***########
 		fileLength += 20
 ##########################################################################
@@ -152,6 +156,7 @@ def listFiles():
 		print "#########################################"
 	
 	setPort.serialClose()
+	return input
 ##########################################################################################
 
 #READ FILE###############################################################################
@@ -172,19 +177,74 @@ def readFile():
 	
 ###########################################################################################
 
+#enableScript##############################################################################
+def enableScript():
+	global fileName
+	setPort.serialOpenCheck()			#open serial connection send AT to check
+	if fileName == None:
+		readCommand = "AT#ESCRIPT?\r\n" 
+	else:
+		readCommand = "AT#ESCRIPT=\"%s\"\r\n" % (fileName)
+	print "SETTING MAIN() SCRIPT AS: " + fileName
+	print "Sending: " + readCommand
+	setPort.telitPort.flush()
+	setPort.telitPort.write(readCommand)
+	input = setPort.getReply()
+	print "STATUS:"
+	for line in input:
+		print line
+	setPort.serialClose()
+############################################################################################
 
+#deleteAll##################################################################################
+def deleteAll():
+	global fileName 
+	files=listFiles()				#list files get names
+	for file in files:		
+		if file.find('"') != -1:		#if it has " it has file name
+			deleteMe = file.split('"')[1]	#just get file name
+			print "FOUND: " + deleteMe	
+			fileName = deleteMe		#set global to pass to deleteFile
+			deleteFile()			#delete fileName
+############################################################################################
 
+deleteAll()
 
 #test			
-getFile()
-#readFile()
-#listFiles()
+######readFile()
+def READFILE():
+	getFile()
+	readFile()
+###############
+
+######listAllFiles
+def LISTFILE():
+	listFiles()
+#################
+
+######listLookForFile()
+def FINDFILE():
+	getFile()
+	listFiles()
+#################
+
+######DELETE FILE
+#getFile()
 #deleteFile()
-writeFile()
-#print fileLength
-#print fileInput
+################
 
+######writeFile()
+#getFile()
+#writeFile()
+################
 
+#####writeCheckfile()
+#getfile()
+#writeFile()
+#readFile()
+###################
 
-
-
+####enableScript()##
+#getFile()
+#enableScript()
+###################

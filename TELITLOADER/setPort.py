@@ -1,6 +1,8 @@
 import serial
 import sys
 import time
+import os
+import setWorkingDir
 
 #gets Serial prt settings from settings.txt################################
 global PORT 
@@ -11,6 +13,7 @@ global telitPort
 def getSerialSettings():
 	global PORT
 	global BAUD
+	
 	with open("settings.txt") as f: #using with you don't have to call close()
 	    for line in f:
 	        args=line.replace('\n','').split(" ")

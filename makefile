@@ -25,7 +25,7 @@ deleteAll:
 	@python
 
 uploadFile:
-	@python commands.py $(LOADFILE)
+	@python TELITLOADER/commands.py $(LOADFILE)
 
 uploadCheck:
 	@python
