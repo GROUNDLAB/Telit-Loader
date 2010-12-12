@@ -1,7 +1,0 @@
-#To set your serial, enter with the format:
-#PORT(SPACE)"portName"(RETURN)
-#BAUD(SPACE)baud#(RETURN)
-#as shown
-
-PORT /dev/ttyUSB0
-BAUD 115200

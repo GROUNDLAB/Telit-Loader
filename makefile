@@ -1,17 +1,35 @@
 #MAKEFILE to load to telit
+
+
+
+#checks if FILE is defined if so adds -f for .py command option
 ifdef FILE
  LOADFILE = -f$(FILE) 
 else
  LOADFILE := 
 endif
 
-port:
+checkPort:
 	@python setport.py #@ makes it silent
 
-upload:
+listFile:
+	@python list.py
+
+readFile:
+	@python
+
+deleteFile:
+	@python
+
+deleteAll:
+	@python
+
+uploadFile:
 	@python commands.py $(LOADFILE)
 
-list:
-	python list.py
+uploadCheck:
+	@python
+
+
 #phony's have no file!
-.PHONY:port, list, read, delete, upload, uploadAll
+.PHONY:checkPort, listFile, readFile, deleteFile, uploadFile, uploadCheck, uploadAll
