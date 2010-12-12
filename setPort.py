@@ -8,7 +8,6 @@ PORT = None
 global BAUD 
 BAUD = None	
 global telitPort 
-telitPort = None
 def getSerialSettings():
 	global PORT
 	global BAUD
@@ -28,11 +27,13 @@ def getSerialSettings():
 	\n BAUD(space)9600(RETURN)"
 	
 	else:
-		print "USING##############\nPort: " + PORT + "\n" "Baud: " + BAUD 
+		print "OPENING##############\nPort: " + PORT + "\n" "Baud: " + BAUD 
+		print "###################"
 ###########################################################################	
 
 #gets reply#################################################################
 def getReply(timeSleep=.1):
+	global telitPort
 	tooLong = time.time()+10
 	while telitPort.inWaiting() < 3 : 	
 		time.sleep(1)			#You have to sleep you can't hammer the processor
@@ -59,7 +60,7 @@ def heartBeat():
 		print "Try to figure it out and try again"
 		sys.exit(1)
 	else:
-		print "we said hello"
+		print "Telit responded proceding"
 		return True
 ##############################################################################
 
@@ -87,6 +88,7 @@ def serialOpenCheck():
 
 #close Socket##################################################################
 def serialClose():
+	global telitPort
 	telitPort.close()
 ###############################################################################
 

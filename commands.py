@@ -1,6 +1,7 @@
 import sys,os
 import optparse
-from setPort import telitPort,getReply,serialOpenCheck(),serialClose()
+import setPort
+import time
 
 global fileInput
 global fileLength
@@ -36,21 +37,44 @@ def writeFile():
 	global fileName
 	global telitPort
 	
-	writeCommand= "AT#DSCRIPT=%s,%i\r\n" % (fileName,fileLength)
+	print "writing file:"
+	print fileName
+	print fileLength
+		
+	writeCommand= "AT#WSCRIPT=%s,%i\r\n" % (fileName,fileLength)
 	print "Sending:" + writeCommand
-	setPort.serialOpenCheck()
-	telitPort.flushInput()			#get rid of junk
-	#telitPort.write(writeCommand)
-	#input = getReply()			#from setPort
-	#if ">>>" not in input:
-	#	print "didn't get >>>??"
-	#	print input		
-	#	sys.exit(1)
+	setPort.serialOpenCheck()			#open serial connection send AT to check
+	setPort.telitPort.flushInput()			#get rid of junk
+	setPort.telitPort.write(writeCommand)
+	input = setPort.getReply()			#from setPort
+	if ">>>" not in input:
+		print "didn't get >>>??"
+		print input		
+		sys.exit(1)
+	print"START FILE#########"
+	lineMarker=0
+	for line in fileInput:
+		try:	#two from back is /n/l
+			if(line[-2:] == "\r\n"):
+				writeLine=line
+			#it is somthing else post append \r\n
+			else:
+				writeLine=line + "\r\n"
+			#write out to port
+			setPort.telitPort.write(writeLine)
+			#print what we wrote
+			print "%i: %s" % (lineMarker,writeLine)
+			lineMarker+=1
+			time.sleep(.1) #sleep a bit to see the line
+		except setPort.serial.serialutil.SerialTimeoutException:
+			print "serial timed out on line " + lineMarker	
+			setPort.serialClose()
+			sys.exit(1)
+	setPort.telitPort.flush()
+	print"END FILE###########"
 
 
-
-
-#test
+#test			
 getFile()
 writeFile()
 #print fileLength

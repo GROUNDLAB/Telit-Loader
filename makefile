@@ -9,7 +9,7 @@ port:
 	@python setport.py #@ makes it silent
 
 upload:
-	@python upload.py $(LOADFILE)
+	@python commands.py $(LOADFILE)
 
 list:
 	python list.py
