@@ -31,14 +31,29 @@ def getSerialSettings():
 		print "USING##############\nPort: " + PORT + "\n" "Baud: " + BAUD 
 ###########################################################################	
 
+#gets reply#################################################################
+def getReply(timeSleep=.1):
+	tooLong = time.time()+10
+	while telitPort.inWaiting() < 3 : 	
+		time.sleep(1)			#You have to sleep you can't hammer the processor
+		if time.time() > tooLong:
+			ERROR="ERROR"
+			return ERROR		#timeout somthing went wrong	
+	else:
+		time.sleep(timeSleep) #wait half second for all data
+		input = telitPort.readlines()
+	return input
+
+
+############################################################################
+
 #checks for Telit with a AT#################################################
 def heartBeat():
 	global telitPort
 	telitPort.flushInput() #clear buffer of junk
 	telitPort.write("AT\r") #send a AT<CR>
-	time.sleep(.1)
-	input = telitPort.readlines()
-	
+	input = getReply()	
+
 	if "OK\r\n" not in input:
 		print "Failed to talk to Telit is it on? is the RX TX right?"
 		print "Try to figure it out and try again"
@@ -75,7 +90,7 @@ def serialClose():
 	telitPort.close()
 ###############################################################################
 
-serialOpenCheck()
-serialClose()
+#serialOpenCheck()
+#serialClose()
 
 
