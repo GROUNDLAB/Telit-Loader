@@ -28,7 +28,7 @@ def getFile():
 		sys.exit(1) #bad for UNIX
 	else:
 		fileName = options.FILE						#the name of the file
-		absFileName = os.path.abspath("../UploadCode/"+options.FILE)	#the full path of the file
+		absFileName = os.path.abspath(setWorkingDir.codeDir+options.FILE)	#the full path of the file
 		print "Opening:"+ absFileName		
 		file = open(absFileName,'r')
 		fileInput = file.readlines()
@@ -185,7 +185,7 @@ def enableScript():
 		readCommand = "AT#ESCRIPT?\r\n" 
 	else:
 		readCommand = "AT#ESCRIPT=\"%s\"\r\n" % (fileName)
-	print "SETTING MAIN() SCRIPT AS: " + fileName
+		print "SETTING MAIN() SCRIPT AS: " + fileName
 	print "Sending: " + readCommand
 	setPort.telitPort.flush()
 	setPort.telitPort.write(readCommand)
@@ -208,9 +208,16 @@ def deleteAll():
 			deleteFile()			#delete fileName
 ############################################################################################
 
-deleteAll()
 
-#test			
+
+
+#test
+######TEST SERIAL
+def TESTSERIAL():
+	setPort.serialOpenCheck()			#open serial connection send AT to check
+	setPort.serialClose()
+#################
+			
 ######readFile()
 def READFILE():
 	getFile()
@@ -229,22 +236,40 @@ def FINDFILE():
 #################
 
 ######DELETE FILE
-#getFile()
-#deleteFile()
+def DELETEFILE():
+	getFile()
+	deleteFile()
+################
+
+#####DELETE ALL FILES
+def DELETEALL():
+	deleteAll()
 ################
 
 ######writeFile()
-#getFile()
-#writeFile()
+def WRITEFILE():
+	getFile()
+	writeFile()
 ################
 
 #####writeCheckfile()
-#getfile()
-#writeFile()
-#readFile()
+def WRITECHECKFILE():
+	getFile()
+	writeFile()
+	readFile()
 ###################
 
 ####enableScript()##
-#getFile()
-#enableScript()
+def ENABLESCRIPT():
+	getFile()
+	enableScript()
 ###################
+
+####checkEnable##
+def CHECKENABLE():
+	enableScript()
+###################
+
+
+
+

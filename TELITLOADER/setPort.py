@@ -30,8 +30,8 @@ def getSerialSettings():
 	\n BAUD(space)9600(RETURN)"
 	
 	else:
-		print "OPENING##############\nPort: " + PORT + "\n" "Baud: " + BAUD 
-		print "###################"
+		print "OPENING SERIAL CONNECTION#######\nPort: " + PORT + "\n" "Baud: " + BAUD 
+		print "################################"
 ###########################################################################	
 
 #gets reply#################################################################
@@ -63,7 +63,7 @@ def heartBeat():
 		print "Try to figure it out and try again"
 		sys.exit(1)
 	else:
-		print "Telit replied proceding..........."
+		print "Telit replied, communications OK....."
 		return True
 ##############################################################################
 
