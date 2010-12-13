@@ -1,8 +1,8 @@
 #MAKEFILE to load to telit
 
 
-SOURCEFILESDIR=  $(wildcard UploadCode/*.py)
-SOURCEFILES= $(notdir $(SOURCEFILESDIR))
+SOURCEFILESDIR=  $(wildcard UploadCode/*.py) 	#grab files
+SOURCEFILES= $(notdir $(SOURCEFILESDIR))	#strip directory
 #checks if FILE is defined if so adds -f for .py command option
 ifdef FILE
  LOADFILE = -f$(FILE) 
@@ -45,10 +45,7 @@ uploadAll:
 		echo $ $$s; \
 		python TELITLOADER/writeFile.py -f$$s; \
 	done
-	
-.py:	
-	@python TELITLOADER/writeFile.py $(notdir $@)
-
+	#enables main script	
 enable:
 	@python TELITLOADER/enableScript.py $(LOADFILE)
 	#Checks which is main file
