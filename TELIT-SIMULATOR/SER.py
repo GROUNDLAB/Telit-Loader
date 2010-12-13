@@ -1,10 +1,17 @@
 #dummy class to test compilation
-
+import time
 def send(string):
-	print string,
-def set_speed(bitrate,form):
+	print string
+def sendbyte(byte):
+	print hex(byte)
+def set_speed(bitrate):
 	print "[SER] setting bitrate:" + bitrate
-	print "[SER] setting type:" + form
 def receive(timeout):
-	print "[SER] dummy send"
-
+	input="no input"
+	print "[SER] wating:"+timeout+" seconds from keyboard input, type something"
+	timer = time.time()+timeout
+	while time.time()<timer:
+		#read input
+		time.sleep(1)	#can't hammer CPU
+		input = sys.stdin.readlines()
+	return input
