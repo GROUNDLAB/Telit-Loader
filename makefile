@@ -52,5 +52,25 @@ enable:
 checkEnable:
 	@python TELITLOADER/enableCheck.py
 
+help:
+	@echo -e "HELP:\n" \
+	"To use loader just type \"make\" and the command you want \n"\
+	"EG: make upload FILE=myfile.py\n"\
+	"COMMANDS: \n"\
+	"checkPort 			: checks the serial connection and sees if the telits responding. \n"\
+	"list 				: lists all files loaded on the telit. \n"\
+	"find FILE=myfile.py 		: finds file on Telit, you must type \"FILE=somthing\" to pass file name.\n"\
+	"read FILE=myfile.py 		: reads the spicifed file. \n"\
+	"delete FILE=myfile.py 		: deletes file from telit. \n"\
+	"deleteAll 			: deletes all files on telit \n"\
+	"upload FILE=myfile.py		: loads specified file onto telit \n"\
+	"uploadAll			: loads all files from the Upload directory onto telit.\n"\
+	"uploadCheck FILE=myfile.py	: loads file then reads it back off Telit to make sure it is there \n"\
+	"enable FILE=myfile.py		: enables the specified file as the main file to exicute on Telit  \n"\
+	"checkEnable			: checks which file is enabled on Telit  \n"\
+	
+	
+	
+	
 #phony's have no file!
 .PHONY:checkPort, list, find, read, delete, deleteAll, upload, uploadAll, uploadCheck, enable, checkEnable

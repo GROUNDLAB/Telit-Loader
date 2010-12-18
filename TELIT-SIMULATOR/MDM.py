@@ -1,11 +1,7 @@
 #simulation class, talks to EVK
 import serial, time
-#import sys
-#import fileinput
-#sys.path.append('../TELIT-SIMULATOR')
-#
-
-
+import binascii
+import sys
 global port
 global PORTName
 global BAUD
@@ -71,6 +67,12 @@ def getSerialSettings():
 
 ###########################################################################	
 
+def sendbyte(byte,timeout):
+	global port
+        byte= bytes(chr(byte))
+	#byte = binascii.unhexlify(byte)
+	port.write(byte)
+	print "[sendbyte]",byte
 
 def send(string, timeout):
 	global port

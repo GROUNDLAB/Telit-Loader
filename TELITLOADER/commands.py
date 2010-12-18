@@ -37,6 +37,27 @@ def getFile():
 		fileLength += 20
 ##########################################################################
 
+
+#Gets file name from options##############################################
+def getFileOption():
+	global fileInput
+	global fileLength
+	global fileName
+	parser = optparse.OptionParser()		#create and init optionParser
+	parser.add_option("-f", "--file",\
+		action = "store", type = "string",\
+		dest = "FILE", help="py file name")
+	(options, args) = parser.parse_args()		#parse options
+	#errorcheck options
+	if options.FILE is None:
+		print "You must specify a file EG. make upload FILE=myFile.py"
+		sys.exit(1) #bad for UNIX
+	else:
+		fileName = options.FILE						#the name of the file
+		return "OK"
+##########################################################################
+
+
 #Sends File###############################################################
 def writeFile():
 	global fileInput
@@ -220,7 +241,7 @@ def TESTSERIAL():
 			
 ######readFile()
 def READFILE():
-	getFile()
+	getFileOption()
 	readFile()
 ###############
 
@@ -231,13 +252,13 @@ def LISTFILE():
 
 ######listLookForFile()
 def FINDFILE():
-	getFile()
+	getFileOption()
 	listFiles()
 #################
 
 ######DELETE FILE
 def DELETEFILE():
-	getFile()
+	getFileOption()
 	deleteFile()
 ################
 
@@ -261,7 +282,7 @@ def WRITECHECKFILE():
 
 ####enableScript()##
 def ENABLESCRIPT():
-	getFile()
+	getFileOption()
 	enableScript()
 ###################
 
