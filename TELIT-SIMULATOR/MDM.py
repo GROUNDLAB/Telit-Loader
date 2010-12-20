@@ -82,12 +82,13 @@ def send(string, timeout):
 
 def receive(timeoutTenthOfSec):
 	global port
-	port.flushInput() #necessary?
+	#port.flushInput() #necessary?
 	sec = int((timeoutTenthOfSec+5)/10)
 	time.sleep(sec)
 	resp = port.readlines()
+	#print resp
 	string = ''.join(resp)
-	#print "[recv]:",string
+	#print "[recv]:"+string
 	return string
 
 #OPEN PORT AUTOMATICALY WITH IMPORT

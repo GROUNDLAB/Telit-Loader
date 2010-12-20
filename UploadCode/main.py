@@ -5,22 +5,24 @@ import MOD
 
 
 #gets reply###works###############################################################
-def getReply():
-	reply = MDM.receive(20)
-	if reply.find("OK"):
-		return reply
-	SER.send(reply)		#if it was bad send out reply for debug and NULL
-	return 0
+def getReply(timeOut):
+	FALSE=0
+	for i in range(10):
+		reply = MDM.receive(timeOut)
+		if -1 != reply.find("OK"):
+			return reply
+		SER.send(reply)		#if it was bad send out reply for debug and NULL
+		return FALSE
 ###############################################################################
 
 #init###works#################################################################
 def init():
 	#AT+CMGF=1 set text mode not PDU
 	MDM.send('ATE0\r',0)
-	reply = getReply()
+	reply = getReply(10)
 	SER.send(reply)
 	MDM.send('AT+CMGF=1\r', 0)
-	reply= getReply()
+	reply= getReply(10)
 	SER.send(reply)
 ##########################################################################
 	
@@ -28,9 +30,9 @@ def init():
 def getCSQ():
 	#<CR><LF>OK<CR><LF>
 	#Get signal strength. +CSQ: <rssi (more=better)>, <ber, less=better>	
-	MDM.send('AT+csq\r', 0)
-	CSQ = MDM.receive(30)
-	if CSQ.find("OK"):
+	MDM.send('AT+CQ\r', 0)
+	CSQ = getRrply() 
+	if CSQ:
 		formatedCSQ = CSQ.split("\r\n")[1].replace("+CSQ:","").\
 		replace(" ","").split( ",")[0]
 		return formatedCSQ 
@@ -87,7 +89,7 @@ def sendNoSaveCMGS(theNumber, theMessage):
         if '>' in PROMT:
        		MDM.send(theMessage,0)
         	MDM.sendbyte(0x1A,0)				#CTR-Z finishes text
-		REPLY = MDM.receive(100)
+		REPLY = MDM.receive(200)
 		if REPLY.find("OK"):
         		return 'OK'                     	# good send
         	else:
@@ -126,7 +128,7 @@ SER.send('hello world!\n')
 SER.send('initing!')
 init()
 	
-for i in range(3):
+for i in range(6):
 #while 1:
 	SER.send('Getting APN OPTIONS')
 	#Short code "47647" LION
@@ -137,8 +139,8 @@ for i in range(3):
 	reply = checkSend(NUMBER, MESSAGE)
 	SER.send(reply)
 	SER.send('out of send message')
-	MOD.sleep(10)
-
+#	MOD.sleep(10)
+	MOD.powerSaving(100)
 #	SER.send('sending second message')
 #	NUMBER = "3473017780"
 #	MESSAGE = makeSendMes()	
