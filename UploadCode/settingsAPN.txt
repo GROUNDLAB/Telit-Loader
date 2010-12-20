@@ -1,0 +1,9 @@
+# All settings for phone and gateway:
+# MUST HAVE ':' BETWEEN NAMES!!!
+# EG. PHONE:(SPACE)3473017780(RETURN)
+
+PHONE: 3473017780
+APN:   testname
+PASSWORD: testPassword
+
+

@@ -36,6 +36,7 @@ def getSerialSettings():
 
 #gets reply#################################################################
 def getReply(timeSleep=.1):
+##THERE IS A BUG IN HERE FOR LARGE AMOUNTS OF DAtA FIX LATER!!!!!
 	global telitPort
 	tooLong = time.time()+10
 	while telitPort.inWaiting() < 3 : 	

@@ -1,7 +1,7 @@
 #MAKEFILE to load to telit
 
 
-SOURCEFILESDIR=  $(wildcard UploadCode/*.py) 	#grab files
+SOURCEFILESDIR=  $(wildcard UploadCode/*.*) 	#grab files$ (wildcard UploadCode/*.py) for just py files
 SOURCEFILES= $(notdir $(SOURCEFILESDIR))	#strip directory
 #checks if FILE is defined if so adds -f for .py command option
 ifdef FILE
@@ -13,42 +13,51 @@ endif
 
 #options
 
-	#Checks serial communication
+#Checks serial communication
 checkPort:
 	@python TELITLOADER/testSerial.py	 #@ makes it silent
 	#@echo $(SOURCEFILES) 			 #For debug
-	#Lists all loaded files
+	
+#Lists all loaded files
 list:
 	@python TELITLOADER/listAll.py
-	#Checks to see if a file is loaded on telit
+	
+#Checks to see if a file is loaded on telit
 find:
 	@python TELITLOADER/findFile.py $(LOADFILE)
-	#Read specific file
+
+#Read specific file
 read:
 	@python TELITLOADER/readFile.py $(LOADFILE)
-	#Delete specific file
+
+#READ specific file
 delete:
 	@python TELITLOADER/deleteFile.py $(LOADFILE)
-	#Delete all files
+
+#Delete all files
 deleteAll:
 	@python TELITLOADER/deleteAll.py
-	#Upload specific file
+
+#Upload specific file
 upload:
 	@python TELITLOADER/writeFile.py $(LOADFILE)
-	#Upload and reads back file for error checking
+
+#Upload and reads back file for error checking
 uploadCheck:
 	@python TELITLOADER/writeCheck.py $(LOADFILE)
-	#Enables main file
+
+#Enables main file
 uploadAll: 
 	@echo $(SOURCEFILES)
 	for s in $(SOURCEFILES); do \
 		echo $ $$s; \
 		python TELITLOADER/writeFile.py -f$$s; \
 	done
-	#enables main script	
+#Enables main script	
 enable:
 	@python TELITLOADER/enableScript.py $(LOADFILE)
-	#Checks which is main file
+	
+#Checks which is main file
 checkEnable:
 	@python TELITLOADER/enableCheck.py
 

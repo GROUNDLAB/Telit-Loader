@@ -33,11 +33,13 @@ def getFile():
 		file = open(absFileName,'r')
 		fileInput = file.readlines()
 		fileLength = os.path.getsize(absFileName)
-		######***TO COMPENSATE FOR FILE SIZE BUG***########
-		fileLength += 20
+################to compemnsate for length problems########################
+		for line in fileInput:
+			pass
+			#fileLength += 0 #add 1 onto each line	
 ##########################################################################
-
-
+        
+	
 #Gets file name from options##############################################
 def getFileOption():
 	global fileInput
@@ -54,6 +56,7 @@ def getFileOption():
 		sys.exit(1) #bad for UNIX
 	else:
 		fileName = options.FILE						#the name of the file
+		print "We are acting on: "+ fileName +"\n" 
 		return "OK"
 ##########################################################################
 
@@ -86,13 +89,13 @@ def writeFile():
 				writeLine=line
 			#it is somthing else append \r\n
 			else:
-				writeLine=line[:-1] + "\r\n"
+				writeLine=line#[:-1] + "\r\n"
 			#write out to port
 			setPort.telitPort.write(writeLine)
 			#print what we wrote
 			print "%i: %s" % (lineMarker,writeLine)
 			lineMarker+=1
-			time.sleep(.1) #sleep a bit to see the line
+		#	time.sleep(.1) #sleep a bit to see the line
 		except setPort.serial.serialutil.SerialTimeoutException:
 			print "serial timed out on line " + lineMarker	
 			setPort.serialClose()
@@ -146,6 +149,22 @@ def deleteFile():
 				print "didn't find .pyo file: " +fileName
 				print lines
 				break
+	else:
+		print "\nDELETING file:"
+		#delete file
+		print "Sending: " + deleteCommand
+		setPort.telitPort.flush()
+		setPort.telitPort.write(deleteCommand)
+		input = setPort.getReply()
+		for lines in input:
+			if "OK" in lines:
+				print "FOUND AND DELETED:" +fileName
+				break	
+			elif "ERROR" in lines:
+				print "didn't find .py file: " +fileName
+				print lines
+				break
+
 	setPort.serialClose()
 ########################################################################################
 
@@ -189,13 +208,18 @@ def readFile():
 	print "Sending: " + readCommand
 	setPort.telitPort.flush()
 	setPort.telitPort.write(readCommand)
-	input = setPort.getReply()
+#	input = setPort.getReply()
+	input = setPort.telitPort.readlines()
+	#write to log file
+	logFile= open("../logFile.txt", 'w')	#overwrite eachtime
 	lineMarker=0
 	for line in input:
+		logFile.write(line)
 		time.sleep(.1)
 		print "%i: %s"%(lineMarker,line)
 		lineMarker+=1
-	
+	print "done reading"
+	logFile.close()
 ###########################################################################################
 
 #enableScript##############################################################################
