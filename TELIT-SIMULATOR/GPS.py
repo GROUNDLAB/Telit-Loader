@@ -26,7 +26,7 @@ def getActualPosition():
 	tail ='\r\nOK\r\n'
 	fullMes = head+lock+tail
 	gpsIndex = gpsIndex + 1
-	return 	fullMes
+	return 	lock
 		
 #############################################################################################
 def getPosition():

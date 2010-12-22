@@ -70,7 +70,10 @@ def writeFile():
 	print "writing file:"
 	print fileName
 	print fileLength
-		
+
+	if int(fileLength)>7200:
+		print "#### FILE TOO BIG 7200 byte max #####"
+		sys.exit(1)		
 	writeCommand= "AT#WSCRIPT=%s,%i\r\n" % (fileName,fileLength)
 	print "Sending:" + writeCommand
 	setPort.serialOpenCheck()			#open serial connection send AT to check
@@ -92,8 +95,8 @@ def writeFile():
 				writeLine=line#[:-1] + "\r\n"
 			#write out to port
 			setPort.telitPort.write(writeLine)
-			#print what we wrote
-			print "%i: %s" % (lineMarker,writeLine)
+			##print what we wrote
+			#print "%i: %s" % (lineMarker,writeLine)
 			lineMarker+=1
 		#	time.sleep(.1) #sleep a bit to see the line
 		except setPort.serial.serialutil.SerialTimeoutException:
