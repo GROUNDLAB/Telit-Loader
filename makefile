@@ -95,7 +95,7 @@ help:
 	"upload FILE=myfile.py		: loads specified file onto telit \n"\
 	"uploadAll			: loads all files from the Upload directory onto telit.\n"\
 	"uploadCheck FILE=myfile.py	: loads file then reads it back off Telit to make sure it is there \n"\
-	"enable FILE=myfile.py		: enables the specified file as the main file to exicute on Telit  \n"\
+	"enable FILE=myfile.py		: enables the specified file as the main file to execute on Telit  \n"\
 	"checkEnable			: checks which file is enabled on Telit  \n"\
 	
 	
