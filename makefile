@@ -69,7 +69,7 @@ uploadCheck:
 #Enables main file
 uploadAll: 
 	@echo $(SOURCEFILES)
-	for s in $(SOURCEFILES); do \
+	@for s in $(SOURCEFILES); do \
 		echo $ $$s; \
 		python TELITLOADER/writeFile.py -f$$s; \
 	done
