@@ -88,8 +88,8 @@ help:
 	"COMMANDS: \n"\
 	"checkPort 			: checks the serial connection and sees if the telits responding. \n"\
 	"list 				: lists all files loaded on the telit. \n"\
-	"find FILE=myfile.py 		: finds file on Telit, you must type \"FILE=somthing\" to pass file name.\n"\
-	"read FILE=myfile.py 		: reads the spicifed file. \n"\
+	"find FILE=myfile.py 		: finds file on Telit, you must type \"FILE=something\" to pass file name.\n"\
+	"read FILE=myfile.py 		: reads the specified file. \n"\
 	"delete FILE=myfile.py 		: deletes file from telit. \n"\
 	"deleteAll 			: deletes all files on telit \n"\
 	"upload FILE=myfile.py		: loads specified file onto telit \n"\
